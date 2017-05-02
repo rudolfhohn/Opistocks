@@ -3,6 +3,7 @@
 from datetime import datetime, timezone
 from flask import jsonify
 import json
+import pandas as pd
 from pandas_datareader import data, wb
 from yahoo_finance import Share
 
@@ -48,8 +49,10 @@ class Stocks:
             if self._data is None:
                 print('Loading data of {}'.format(self.index))
                 df = data.DataReader(self.index, 'yahoo', datetime(1900, 1, 1),
-                        datetime.today())['Adj Close']
-                self._data = [list(a) for a in zip(df.index.values.tolist(),
+                                     datetime.today())['Adj Close']
+                # Convert the date format from timestamp to YYYYMMDD
+                dates = [int(pd.to_datetime(x).strftime("%Y%m%d")) for x in df.index.values.tolist()]
+                self._data = [list(a) for a in zip(dates,
                               df.values.tolist())]
             return self._data
 
@@ -66,7 +69,9 @@ class Stocks:
                     d_end = datetime.strptime(date_end, '%Y%m%d')
                     # Retrieve the data
                     df = data.DataReader(self.index, 'yahoo', d_start, d_end)['Adj Close']
-                    self._data = [list(a) for a in zip(df.index.values.tolist(),
+                    # Convert the date format from timestamp to YYYYMMDD
+                    dates = [int(pd.to_datetime(x).strftime("%Y%m%d")) for x in df.index.values.tolist()]
+                    self._data = [list(a) for a in zip(dates,
                                   df.values.tolist())]
                     return self._data
             except Exception as e:
