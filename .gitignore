@@ -90,3 +90,6 @@ ENV/
 
 # macOS file
 .DS_Store
+
+# npm folder
+node_modules
