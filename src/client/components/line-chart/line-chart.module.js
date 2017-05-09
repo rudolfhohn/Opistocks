@@ -1,0 +1,1 @@
+angular.module('lineChart', ['angularMoment','chart.js']);
