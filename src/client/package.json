@@ -1,0 +1,12 @@
+{
+  "name": "opistocks-client",
+  "version": "1.0.0",
+  "description": "Visualization of the correlation between stocks and sentiment analysis of the company on Twitter",
+  "main": "index.html",
+  "author": "Antoine Magnin",
+  "license": "GPLv3",
+  "dependencies": {
+    "angular": "^1.6.4",
+    "bootstrap-v4-dev": "^4.0.0-alpha.5"
+  }
+}
