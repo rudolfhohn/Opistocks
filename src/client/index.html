@@ -9,8 +9,14 @@
     <!-- JS files -->
     <script src="node_modules/jquery/dist/jquery.min.js"></script>
     <script src="node_modules/tether/dist/js/tether.min.js"></script>
+    <script src="node_modules/moment/moment.js"></script>
+    <script src="node_modules/chart.js/dist/Chart.js"></script>
     <script src="node_modules/angular/angular.min.js"></script>
+    <script src="node_modules/angular-chart.js/dist/angular-chart.js"></script>
+    <script src="node_modules/angular-moment/angular-moment.js"></script>
     <script src="app.js"></script>
+    <script src="components/line-chart/line-chart.module.js"></script>
+    <script src="components/line-chart/line-chart.component.js"></script>
 
     <!-- CSS files -->
     <link href="node_modules/bootstrap-v4-dev/dist/css/bootstrap.min.css" rel="stylesheet" />
@@ -28,6 +34,7 @@
     </div>
 
     <div class="container">
+        <line-chart></line-chart>
     </div>
 
 </body>

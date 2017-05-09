@@ -7,6 +7,10 @@
   "license": "GPLv3",
   "dependencies": {
     "angular": "^1.6.4",
-    "bootstrap-v4-dev": "^4.0.0-alpha.5"
+    "angular-chart.js": "^1.1.1",
+    "angular-moment": "^1.0.1",
+    "bootstrap-v4-dev": "^4.0.0-alpha.5",
+    "chart.js": "^2.5.0",
+    "moment": "^2.18.1"
   }
 }

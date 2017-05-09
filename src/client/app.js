@@ -1,1 +1,1 @@
-angular.module('opistocks', []);
+angular.module('opistocks', ['lineChart']);
