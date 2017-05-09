@@ -4,20 +4,22 @@ angular.module('lineChart').component('lineChart', {
 
     controller: ['moment', function LineChartController(moment) {
 
-        this.labels = [];
-
-        // get last 7 working days
-        for (i = 1; this.labels.length < 7; i++) {
-            var date = moment().startOf('day').add(-i, 'day');
-
-            // ignore weekend
-            if (date.isoWeekday() == 6 || date.isoWeekday() == 7) {
-                continue;
-            } else { 
-                this.labels.push(date);
+        this.getLabels = function () {
+            var labels = [];
+            // get last 7 working days
+            for (i = 1; labels.length < 7; i++) {
+                var date = moment().startOf('day').add(-i, 'day');
+                // ignore weekend
+                if (date.isoWeekday() == 6 || date.isoWeekday() == 7) {
+                    continue;
+                } else {
+                    labels.push(date);
+                }
             }
-        }
+            return labels;
+        };
 
+        this.labels = this.getLabels();
         this.series = ['Stock', 'Sentiment'];
 
         this.datasets = [{
