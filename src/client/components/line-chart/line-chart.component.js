@@ -2,7 +2,9 @@ angular.module('lineChart').component('lineChart', {
 
     templateUrl: 'components/line-chart/line-chart.template.html',
 
-    controller: ['moment', function LineChartController(moment) {
+    controller: ['moment', '$http', function LineChartController(moment, $http) {
+
+        var self = this;
 
         this.getLabels = function () {
             var labels = [];
@@ -19,7 +21,33 @@ angular.module('lineChart').component('lineChart', {
             return labels;
         };
 
+        this.getStockValues = function (index, callback) {
+            // need at least 1 day
+            if (this.labels.length == 0) return;
+
+            // construct url
+            var start = this.labels[this.labels.length - 1].format('YYYYMMDD');
+            var end = this.labels[0].format('YYYYMMDD');
+            var url = 'http://localhost:8080/stocks/' + index + '/' + start + '/' + end;
+
+            $http({
+                method: 'GET',
+                url: url
+            }).then(function successCallback(response) {
+                var values = [];
+                response.data.forEach(function (value) {
+                    values.push(value[1]);
+                });
+                callback(values);
+            });
+        };
+
         this.labels = this.getLabels();
+        this.data = [[], []];
+        this.getStockValues('aapl', function (data) {
+            self.data[0] = data;
+        });
+
         this.series = ['Stock', 'Sentiment'];
 
         this.datasets = [{
@@ -57,11 +85,6 @@ angular.module('lineChart').component('lineChart', {
                 }]
             }
         };
-
-        this.data = [
-            [65, 59, 80, 81, 56, 55, 40],
-            [28, 48, 40, 19, 86, 27, 90]
-        ];
 
     }]
 
