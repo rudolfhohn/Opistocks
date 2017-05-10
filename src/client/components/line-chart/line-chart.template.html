@@ -1,5 +1,5 @@
-<div class="card">
-    <div class="card-header">Visualized index : <strong>aapl</strong></div>
+<div class="card" ng-if="$ctrl.index">
+    <div class="card-header">Visualized index : <strong>{{$ctrl.index}}</strong></div>
     <div class="card-block">
         <canvas class="chart chart-line"
             chart-data="$ctrl.data"
