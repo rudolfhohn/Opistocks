@@ -2,7 +2,7 @@ angular.module('lineChart').component('lineChart', {
 
     templateUrl: 'components/line-chart/line-chart.template.html',
 
-    controller: ['moment', '$http', function LineChartController(moment, $http) {
+    controller: ['moment', '$http', '$scope', function LineChartController(moment, $http, $scope) {
 
         var self = this;
 
@@ -42,13 +42,16 @@ angular.module('lineChart').component('lineChart', {
             });
         };
 
-        this.labels = this.getLabels();
-        this.data = [[], []];
-        this.getStockValues('aapl', function (data) {
-            self.data[0] = data;
+        $scope.$on('index', function($event, index) {
+            self.index = index;
+            self.getStockValues(index, function (data) {
+                self.data[0] = data;
+            });
         });
 
+        this.labels = this.getLabels();
         this.series = ['Stock', 'Sentiment'];
+        this.data = [[], []];
 
         this.datasets = [{
             yAxisID: 'stock',

@@ -1,1 +1,1 @@
-angular.module('opistocks', ['lineChart']);
+angular.module('opistocks', ['lineChart', 'indexSearch']);
