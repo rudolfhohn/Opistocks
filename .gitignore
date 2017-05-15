@@ -93,3 +93,6 @@ ENV/
 
 # npm folder
 node_modules
+
+# pickled files
+*.p
