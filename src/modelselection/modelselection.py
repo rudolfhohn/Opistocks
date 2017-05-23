@@ -168,7 +168,7 @@ for i in range(len(dfs)):
             print('SVM rbf start')
             svm_rbf = svm.SVC()
             y_pred = svm_rbf.fit(X[:threshold], y[:threshold]).predict(X[threshold:])
-            results_df_svm.append(classification_report(y[threshold:], y_pred, target_names=target_names))
+            results_df_rbf.append(classification_report(y[threshold:], y_pred, target_names=target_names))
             print('SVM rbf finished')
 
         # Naive Bayes
