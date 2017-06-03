@@ -1,3 +1,6 @@
+# Custom directory
+twpData/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -93,3 +96,6 @@ ENV/
 
 # npm folder
 node_modules
+
+# pickled files
+*.p
