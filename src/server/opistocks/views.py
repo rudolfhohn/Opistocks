@@ -2,7 +2,9 @@
 
 from opistocks import app
 from .Stocks import Stocks
+from .Sentiment import Sentiment
 import json
+import numpy as np
 
 from flask import jsonify, Response
 
@@ -88,3 +90,42 @@ def check_index(index):
         return jsonify(valid=True)
     else:
         return jsonify(valid=False)
+
+
+# Route to predict the sentiment value of a tweet
+@app.route('/sentiment/<tweet>')
+def sentiment(tweet):
+    """
+    @api {get} /sentiment/:tweet Predict sentiment of tweet
+    @apiName sentiment
+    @apiGroup sentiment
+    @apiDescription Predict the sentiment of a tweet with a classifier (SVM)
+
+    @apiParam {String} tweet Tweet to classify
+
+    @apiSuccess {Integer} sentiment  Return 1 for negative, 3 neutral, 5 positive
+
+    @apiSuccessExample Success-Response:
+        HTTP/1.1 200 OK
+        {
+            "sentiment": 5
+        }
+    """
+    s = Sentiment()
+    sent = s.sentiment(tweet)
+    return jsonify(sentiment=np.asscalar(np.int16(sent)))
+
+@app.route('/sentiment/<index>/<date_start>/<date_end>')
+def get_sentiment_between_date(index, date_start, date_end):
+    """
+    @api {get} /sentiment/:index/:date_start/:date_end Request sentiment values of <index> between <date_start> and <date_end>
+    @apiName get_sentiment_between_date
+    @apiGroup sentiment
+    @apiDescription Get all sentiment values between two days on Twitter
+
+    @apiParam {index} index         Index to request the historic from
+    @apiParam {String} date_start   Start date for the historic
+    @apiParam {String} date_end     End date for the historic
+    """
+    s = Sentiment()
+    return Response(json.dumps(s.get_sentiments_twitter_between_dates(index, date_start, date_end)), mimetype='application/json')
