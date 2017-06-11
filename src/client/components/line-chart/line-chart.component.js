@@ -42,10 +42,34 @@ angular.module('lineChart').component('lineChart', {
             });
         };
 
+        this.getSentimentValues = function (index, callback) {
+            // need at least 1 day
+            if (this.labels.length == 0) return;
+
+            // construct url
+            var start = this.labels[this.labels.length - 1].format('YYYYMMDD');
+            var end = this.labels[0].format('YYYYMMDD');
+            var url = 'http://localhost:8080/sentiment/' + index + '/' + start + '/' + end;
+
+            $http({
+                method: 'GET',
+                url: url
+            }).then(function successCallback(response) {
+                var values = [];
+                response.data.forEach(function (value) {
+                    values.push(value[1]);
+                });
+                callback(values);
+            });
+        };
+
         $scope.$on('index', function($event, index) {
             self.index = index;
             self.getStockValues(index, function (data) {
                 self.data[0] = data;
+            });
+            self.getSentimentValues(index, function(data) {
+                self.data[1] = data;
             });
         });
 
