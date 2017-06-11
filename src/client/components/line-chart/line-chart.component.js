@@ -65,6 +65,7 @@ angular.module('lineChart').component('lineChart', {
 
         $scope.$on('index', function($event, index) {
             self.index = index;
+            self.data = [[], []];
             self.getStockValues(index, function (data) {
                 self.data[0] = data;
             });
@@ -72,6 +73,10 @@ angular.module('lineChart').component('lineChart', {
                 self.data[1] = data;
             });
         });
+
+        this.dataReady = function() {
+            return this.data[0].length > 0 && this.data[1].length > 0;
+        };
 
         this.labels = this.getLabels();
         this.series = ['Stock', 'Sentiment'];
