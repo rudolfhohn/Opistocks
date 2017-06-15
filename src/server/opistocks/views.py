@@ -127,5 +127,5 @@ def get_sentiment_between_date(index, date_start, date_end):
     @apiParam {String} date_start   Start date for the historic
     @apiParam {String} date_end     End date for the historic
     """
-    s = Sentiment()
-    return Response(json.dumps(s.get_sentiments_twitter_between_dates(index, date_start, date_end)), mimetype='application/json')
+    s = Sentiment(index)
+    return Response(json.dumps(s.get_sentiments_twitter_between_dates(date_start, date_end)), mimetype='application/json')

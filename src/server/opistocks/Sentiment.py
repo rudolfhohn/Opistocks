@@ -25,9 +25,11 @@ class Sentiment:
     """
     instance = None
 
-    def __init__(self):
+    def __init__(self, index):
         if not Sentiment.instance:
-            Sentiment.instance = Sentiment.__Sentiment()
+            Sentiment.instance = Sentiment.__Sentiment(index)
+        else:
+            Sentiment.instance.index = index
 
     def __getattr__(self, name):
         return getattr(self.instance, name)
@@ -36,23 +38,33 @@ class Sentiment:
         """Singleton class"""
         PICKLE_FILE = 'opistocks_classifier_vectorizer_prod.pickle'
 
-        def __init__(self):
+        def __init__(self, index):
             """Init of class
 
             Load the classifier and the vectorizer
             """
             self.classifier, self.vectorizer = pickle.load(open(self.PICKLE_FILE, 'rb'))
+            self.index = index
+
+            # Authentify to Twitter API
+            consumer_key = config.CONSUMER_KEY
+            consumer_secret = config.CONSUMER_SECRET
+            access_token = config.ACCESS_TOKEN
+            access_token_secret = config.ACCESS_TOKEN_SECRET
+
+            self.auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
+            self.auth.set_access_token(access_token, access_token_secret)
 
         def sentiment(self, tweet):
             vec = self.vectorizer.transform([tweet])
             return int(str(self.classifier.predict(vec)[0]))
 
-        def get_sentiments_twitter(self, index):
+        def get_sentiments_twitter(self):
             date_end = datetime.today().strftime('%Y%m%d')
             date_start = str(int(date_end) - 7)
-            return self.get_sentiments_twitter_between_dates(index, date_start, date_end)
+            return self.get_sentiments_twitter_between_dates(date_start, date_end)
 
-        def get_sentiments_twitter_between_dates(self, index, date_start, date_end):
+        def get_sentiments_twitter_between_dates(self, date_start, date_end):
             """Sentiment value from tweets over a period of time
 
             This method works in different steps.
@@ -69,20 +81,11 @@ class Sentiment:
             d_start = parse(date_start).strftime('%Y-%m-%d')
             d_end = parse(date_end).strftime('%Y-%m-%d')
 
-            # Authentify to Twitter API
-            consumer_key = config.CONSUMER_KEY
-            consumer_secret = config.CONSUMER_SECRET
-            access_token = config.ACCESS_TOKEN
-            access_token_secret = config.ACCESS_TOKEN_SECRET
-
-            auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
-            auth.set_access_token(access_token, access_token_secret)
-            api = tweepy.API(auth)
-
             # Search tweets
-            query = '{} -filter:retweets'.format(index)
-            results_search_end = api.search(q=query, lang='eng', results_type='popular', count=100, until=d_end)
-            results_search_start = api.search(q=query, lang='eng', results_type='popular', count=100, until=d_start)
+            query = f'{self.index} -filter:retweets'
+            api = tweepy.API(self.auth)
+            results_search_end = api.search(q=query, lang='en', results_type='popular', count=100, until=d_end)
+            results_search_start = api.search(q=query, lang='en', results_type='popular', count=100, until=d_start)
             results = [{'text': x._json['text'], 'created_at': x._json['created_at']} for x in list(chain(results_search_start, results_search_end))]
 
             # N most used tags
@@ -92,12 +95,13 @@ class Sentiment:
             l = [i.lower() for i in l if i.lower() not in stop]
             l = [i for i in l if i not in string.punctuation]
             tags = [i[0] for i in Counter(l).most_common(N_TAGS)]
+            print(tags)
 
             # Retrieve sentiments for tweets
             tweets = []
             for i in range(int(date_end) - int(date_start) + 1):
                 cur_date = parse(str(int(date_start) + i)).strftime('%Y-%m-%d')
-                query = '{} OR {} -filter:retweets'.format(index, ' OR '.join(tags))
+                query = '{} OR {} -filter:retweets'.format(self.index, ' OR '.join(tags))
                 tweets.append(api.search(q=query, lang='eng', results_type='mixed', count=100, until=cur_date))
 
             # Analyze tweets
