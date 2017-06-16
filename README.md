@@ -112,7 +112,7 @@ The next search queries are constructed following certain rules and choices.
 ### Stock market history price
 The tools used for this part are [Yahoo Finance API](https://pypi.python.org/pypi/yahoo-finance/1.1.) and [Pandas](http://pandas.pydata.org).
 
-Before trying downloading the stock market history, the server tests is the index exists. Then, the history is downloaded on the 7 past days. Because the market is closed on weekends and during holidays, the range of available days are between 5 and 7. The results are kept and manipulated using *DataFrames*.
+Before trying downloading the stock market history, the server tests if the index exists. Then, the history is downloaded on the 7 past days. Because the market is closed on weekends and during holidays, the range of available days are between 5 and 7. The results are kept and manipulated using *DataFrames*.
 
 On 25th May, Yahoo Finance stopped their API support and closed the main address. However, we were able to find another way of calling the API (secondary route) but we do not know for how long it will still be available.
 
