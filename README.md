@@ -30,22 +30,22 @@ In addition of these data sets, the project also uses the [Twitter Search REST A
 
 ## Planning
 
-- 28.04 - 5.05: Specification and feasibility study (All)
-- 5.05 - 19.05: REST server implementation and "Stocks" routes integration (Fahy)
-- 5.05 - 19.05: Web client skeleton implementation and "Stocks" visualization (Magnin)
-- 5.05 - 2.06: Machine-Learning models evaluation (Höhn)
-- 26.05 - 9.06: REST server integration of "Sentiment" + Best tags retrieval (Fahy)
-- 26.05 - 9.06: Web client integration of "Sentiment" + Tests (Magnin)
-- 9.06 - 16.06: Report and presentation (Höhn)
+- **28.04 - 05.05 :** Specification and feasibility study (All)
+- **05.05 - 19.05 :** REST server implementation and "Stocks" routes integration (Fahy)
+- **05.05 - 19.05 :** Web client skeleton implementation and "Stocks" visualization (Magnin)
+- **05.05 - 02.06 :** Machine-Learning models evaluation (Höhn)
+- **26.05 - 09.06 :** REST server integration of "Sentiment" + Best tags retrieval (Fahy)
+- **26.05 - 09.06 :** Web client integration of "Sentiment" + Tests (Magnin)
+- **09.06 - 16.06 :** Report and presentation (Höhn)
 
 ## Features and use cases
-When the user arrives on the web application, he can only enter an index, and these actions are performed:
+When the user arrives on the web application, he can only enter an index, and these actions are performed :
 
-- 1) Download the stock price history on the last 7 days from Yahoo Finance API
-- 2) Search 2 times for tweets on the Twitter API (one search on current day, another on day-7)
-- 3) Extract the 5 most occurring tags in those ~200 tweets
-- 4) Search 7 times for tweets (one search on every day)
-- 5) Measure the sentiment mean value for each day based on the tweets and the Sentiment Analysis
+1. Download the stock price history on the last 7 days from Yahoo Finance API
+2. Search 2 times for tweets on the Twitter API (one search on current day, another on day-7)
+3. Extract the 5 most occurring tags in those ~200 tweets
+4. Search 7 times for tweets (one search on every day)
+5. Measure the sentiment mean value for each day based on the tweets and the Sentiment Analysis
 
 ## Technics, algorithms and tools used
 The following sections describes for every major part of the project the technics, the tools and, if applicable, the algorithms.
@@ -94,7 +94,7 @@ The other results can be found in the [results visualization Jupyter notebook](h
 ### Twitter Tags selection
 The tools used for this part art [NLTK](http://nltk.org) and [Tweepy](http://tweepy.readthedocs.io).
 
-The first step is to download two batches of tweets, one on the current day, and the other 7 days prior the current day. This two-step download aims at having the most probability of getting the most spoken tags. The query is done by:
+The first step is to download two batches of tweets, one on the current day, and the other 7 days prior the current day. This two-step download aims at having the most probability of getting the most spoken tags. The query is done by :
 
 - Filtering the retweets to avoid downloading multiple times the same tweet
 - Using the index as the content of the query
